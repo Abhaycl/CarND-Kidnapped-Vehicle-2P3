@@ -74,7 +74,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
             particles[i].y += vel_del * sin(particles[i].theta);
             //particles[i].theta // Unchanged if yaw_rate is too small
         } else{
-			const double vel_yaw = velocity / yaw_rate;
+            const double vel_yaw = velocity / yaw_rate;
             const double theta_new = particles[i].theta + yaw_del;
             particles[i].x += vel_yaw * (sin(theta_new) - sin(particles[i].theta));
             particles[i].y += vel_yaw * (-cos(theta_new) + cos(particles[i].theta));
