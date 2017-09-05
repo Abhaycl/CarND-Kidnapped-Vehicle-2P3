@@ -30,7 +30,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
     normal_distribution<double> dist_y(y, std[1]);
     normal_distribution<double> dist_theta(theta, std[2]);
     
-    //init number of particles to use
+    // Init number of particles to use
     num_particles = 500;
     // Resize the `particles` vector to fit desired number of particles
     particles.resize(num_particles);
@@ -57,10 +57,9 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
     //  http://en.cppreference.com/w/cpp/numeric/random/normal_distribution
     //  http://www.cplusplus.com/reference/random/default_random_engine/
     
-    //some constants to save computation power
+    // Some constants to save computation power
     const double vel_del = velocity * delta_t;
     const double yaw_del = yaw_rate * delta_t;
-    const double vel_yaw = velocity / yaw_rate;
     
     normal_distribution<double> dist_x(0.0, std_pos[0]);
     normal_distribution<double> dist_y(0.0, std_pos[1]);
@@ -73,8 +72,9 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
         if (fabs(yaw_rate) < 0.001){
             particles[i].x += vel_del * cos(particles[i].theta);
             particles[i].y += vel_del * sin(particles[i].theta);
-            //particles[i].theta //unchanged if yaw_rate is too small
+            //particles[i].theta // Unchanged if yaw_rate is too small
         } else{
+			const double vel_yaw = velocity / yaw_rate;
             const double theta_new = particles[i].theta + yaw_del;
             particles[i].x += vel_yaw * (sin(theta_new) - sin(particles[i].theta));
             particles[i].y += vel_yaw * (-cos(theta_new) + cos(particles[i].theta));
@@ -135,7 +135,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
     const double normalizer = 2 * M_PI * std_landmark[0] * std_landmark[1];
     
     for (int i = 0; i < particles.size(); i++) {
-    //for(unsigned p_ctr=0; p_ctr < particles.size(); p_ctr++) {
         std::vector<LandmarkObs> predicted;
         
         for (int j = 0; j < map_landmarks.landmark_list.size(); j++) {
@@ -157,7 +156,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         std::vector<LandmarkObs> transformed_obs;
         double total_prob = 1.0f;
         
-        // transform coordinates of all observations (for current particle)
+        // Transform coordinates of all observations (for current particle)
         for (int k = 0; k < observations.size(); k++) {
         //for(auto obs_lm : observations) {
             LandmarkObs obs;
@@ -211,7 +210,7 @@ Particle ParticleFilter::SetAssociations(Particle particle, std::vector<int> ass
     // sense_x: the associations x mapping already converted to world coordinates
     // sense_y: the associations y mapping already converted to world coordinates
     
-    //Clear the previous associations
+    // Clear the previous associations
     particle.associations.clear();
     particle.sense_x.clear();
     particle.sense_y.clear();
@@ -228,7 +227,7 @@ string ParticleFilter::getAssociations(Particle best) {
     stringstream ss;
     copy(v.begin(), v.end(), ostream_iterator<int>(ss, " "));
     string s = ss.str();
-    s = s.substr(0, s.length() - 1);  // get rid of the trailing space
+    s = s.substr(0, s.length() - 1);  // Get rid of the trailing space
     return s;
 }
 
@@ -237,7 +236,7 @@ string ParticleFilter::getSenseX(Particle best) {
     stringstream ss;
     copy(v.begin(), v.end(), ostream_iterator<float>(ss, " "));
     string s = ss.str();
-    s = s.substr(0, s.length() - 1);  // get rid of the trailing space
+    s = s.substr(0, s.length() - 1);  // Get rid of the trailing space
     return s;
 }
 
@@ -246,6 +245,6 @@ string ParticleFilter::getSenseY(Particle best) {
     stringstream ss;
     copy(v.begin(), v.end(), ostream_iterator<float>(ss, " "));
     string s = ss.str();
-    s = s.substr(0, s.length() - 1);  // get rid of the trailing space
+    s = s.substr(0, s.length() - 1);  // Get rid of the trailing space
     return s;
 }
